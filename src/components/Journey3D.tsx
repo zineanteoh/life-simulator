@@ -22,7 +22,7 @@ interface SceneProps {
 }
 
 // Start screen overlay component
-const StartOverlay = ({ onStart }: { onStart: () => void }) => {
+const StartOverlay = () => {
   return (
     <div
       style={{
@@ -402,11 +402,7 @@ const Scene = ({
       </group>
       <Ground />
       <Path />
-      <LifeObjects
-        birthYear={birthYear}
-        currentAge={currentAge}
-        isTimePaused={isTimePaused}
-      />
+      <LifeObjects currentAge={currentAge} isTimePaused={isTimePaused} />
       {!hasStarted && (
         <mesh position={[0, 1, -40]}>
           <sphereGeometry args={[0.5, 16, 16]} />
@@ -425,7 +421,6 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
   const [currentAge, setCurrentAge] = useState(0);
   const [isTimePaused, setIsTimePaused] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-  const controlsRef = useRef<any>(null);
   const initialZ = 0 - 45;
   const [currentEvent, setCurrentEvent] = useState<HistoricalEvent | null>(
     null
@@ -488,9 +483,7 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
       />
       <AudioPlayer />
       {/* Only show start overlay at the very beginning */}
-      {!hasStarted && currentAge === 0 && (
-        <StartOverlay onStart={handleStart} />
-      )}
+      {!hasStarted && currentAge === 0 && <StartOverlay />}
     </div>
   );
 };

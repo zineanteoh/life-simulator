@@ -11,7 +11,6 @@ interface AgeObject {
 }
 
 interface LifeObjectProps {
-  birthYear: number;
   currentAge: number;
   isTimePaused: boolean;
 }
@@ -180,12 +179,10 @@ const ObjectShape: React.FC<{ object: AgeObject; isTimePaused: boolean }> = ({
 };
 
 export const LifeObjects: React.FC<LifeObjectProps> = ({
-  birthYear,
   currentAge,
   isTimePaused,
 }) => {
   const ageObjects = useMemo(() => defineAgeObjects(), []);
-  const currentYear = birthYear + Math.floor(currentAge);
 
   // Determine which objects should be visible based on current age
   const visibleObjects: AgeObject[] = [];
