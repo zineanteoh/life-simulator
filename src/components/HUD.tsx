@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 interface HUDProps {
   age: number;
   birthYear: number;
@@ -7,30 +5,7 @@ interface HUDProps {
 }
 
 export const HUD = ({ age, birthYear, isTimePaused = false }: HUDProps) => {
-  const [phase, setPhase] = useState("");
-  const [phaseColor, setPhaseColor] = useState("");
-  const [phaseDescription, setPhaseDescription] = useState("");
   const currentYear = birthYear + age;
-
-  useEffect(() => {
-    if (age <= 30) {
-      setPhase("The Normal World");
-      setPhaseColor(isTimePaused ? "#b0c4de" : "#64B5F6");
-      setPhaseDescription("Everything that happened is normal to you");
-    } else if (age <= 60) {
-      setPhase("Career Peak");
-      setPhaseColor(isTimePaused ? "#b0c4de" : "#81C784");
-      setPhaseDescription(
-        "You're at the peak of your career during these events"
-      );
-    } else {
-      setPhase("Against Nature");
-      setPhaseColor(isTimePaused ? "#b0c4de" : "#FFB74D");
-      setPhaseDescription(
-        "Everything that happened goes against human nature for you"
-      );
-    }
-  }, [age, isTimePaused]);
 
   return (
     <div

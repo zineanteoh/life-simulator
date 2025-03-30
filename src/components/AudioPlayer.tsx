@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import "./AudioPlayer.css"; // We'll create this file
 
-interface AudioPlayerProps {
-  isTimePaused: boolean;
-}
+interface AudioPlayerProps {}
 
-export const AudioPlayer = ({ isTimePaused }: AudioPlayerProps) => {
+export const AudioPlayer = ({}: AudioPlayerProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [volume, setVolume] = useState<number>(0.3); // Default volume 30%
   const [isMuted, setIsMuted] = useState<boolean>(false);

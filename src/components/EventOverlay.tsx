@@ -20,7 +20,7 @@ export const EventOverlay = ({
   const [personalImpact, setPersonalImpact] = useState<string>("");
 
   // Generate a personal impact message based on the event and current phase
-  const generatePersonalImpact = (event: HistoricalEvent, phase: string) => {
+  const generatePersonalImpact = (event: HistoricalEvent) => {
     const age = event.age;
     let impact = "";
 
@@ -67,7 +67,7 @@ export const EventOverlay = ({
       });
 
       // Generate personal impact message for the new event
-      setPersonalImpact(generatePersonalImpact(event, phaseMessage));
+      setPersonalImpact(generatePersonalImpact(event));
 
       // Auto-select new events as they come in
       setSelectedEvent(event);
@@ -80,7 +80,7 @@ export const EventOverlay = ({
         return () => clearTimeout(timer);
       }
     }
-  }, [event, isTimePaused, phaseMessage]);
+  }, [event, isTimePaused]);
 
   // Handle clicking on a sidebar event
   const handleEventClick = (evt: HistoricalEvent) => {
@@ -88,7 +88,7 @@ export const EventOverlay = ({
       setSelectedEvent(null); // Toggle off if clicking the same event
     } else {
       setSelectedEvent(evt);
-      setPersonalImpact(generatePersonalImpact(evt, phaseMessage));
+      setPersonalImpact(generatePersonalImpact(evt));
     }
   };
 

@@ -14,7 +14,6 @@ export const fetchHistoricalEvents = async (
   birthYear: number,
   currentAge: number
 ): Promise<HistoricalContext> => {
-  const currentYear = birthYear + currentAge;
   const phaseMessage = getPhaseMessage(currentAge);
   
   try {

@@ -8,7 +8,6 @@ interface BirthYearInputProps {
 
 const BirthYearInput = ({ onBirthYearSubmit }: BirthYearInputProps) => {
   const [birthYear, setBirthYear] = useState<string>("");
-  const currentYear = new Date().getFullYear();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

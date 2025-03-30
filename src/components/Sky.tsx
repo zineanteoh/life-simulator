@@ -1,9 +1,8 @@
 import * as THREE from "three";
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 
 interface SkyProps {
-  currentAge: number;
   isTimePaused?: boolean;
 }
 
@@ -142,7 +141,7 @@ const Cloud = ({
   );
 };
 
-export const Sky = ({ currentAge, isTimePaused = false }: SkyProps) => {
+export const Sky = ({ isTimePaused = false }: SkyProps) => {
   // Add clouds at random positions
   const clouds = useMemo(() => {
     const tempClouds = [];

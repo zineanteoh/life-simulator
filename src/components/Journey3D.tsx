@@ -15,7 +15,6 @@ interface Journey3DProps {
 interface SceneProps {
   currentAge: number;
   setCurrentAge: (age: number) => void;
-  controlsRef: React.RefObject<any>;
   birthYear: number;
   onEventChange: (event: HistoricalEvent | null) => void;
   isTimePaused: boolean;
@@ -280,7 +279,6 @@ const Character = ({
 const Scene = ({
   currentAge,
   setCurrentAge,
-  controlsRef,
   birthYear,
   onEventChange,
   isTimePaused,
@@ -288,7 +286,6 @@ const Scene = ({
 }: SceneProps) => {
   const characterRef = useRef<THREE.Group>(null);
   const [events, setEvents] = useState<HistoricalEvent[]>([]);
-  const [lastEventIndex, setLastEventIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
@@ -390,7 +387,7 @@ const Scene = ({
         args={[isTimePaused ? "#444444" : "#87CEEB"]}
       />
       <fog attach="fog" args={[isTimePaused ? "#444444" : "#87CEEB", 10, 50]} />
-      <Sky currentAge={currentAge} isTimePaused={isTimePaused} />
+      <Sky isTimePaused={isTimePaused} />
       <ambientLight intensity={isTimePaused ? 0.3 : 0.5} />
       <directionalLight
         position={[10, 10, 5]}
@@ -473,7 +470,6 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
         <Scene
           currentAge={currentAge}
           setCurrentAge={setCurrentAge}
-          controlsRef={controlsRef}
           birthYear={birthYear}
           onEventChange={setCurrentEvent}
           isTimePaused={isTimePaused}
@@ -490,7 +486,7 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
         phaseMessage={phaseMessage}
         isTimePaused={isTimePaused}
       />
-      <AudioPlayer isTimePaused={isTimePaused} />
+      <AudioPlayer />
       {/* Only show start overlay at the very beginning */}
       {!hasStarted && currentAge === 0 && (
         <StartOverlay onStart={handleStart} />
