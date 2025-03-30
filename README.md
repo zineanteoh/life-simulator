@@ -6,6 +6,10 @@ Time: 1.5 hours.
 
 Every week, [@kohrachel](https://github.com/kohrachel/) and I give ourselves an hour to create a goofy project solely with AI. No human coding, any idea you can think of.
 
+### Video Demo (with audio)
+
+https://github.com/user-attachments/assets/530eefc1-6404-414d-ab90-104bde659a98
+
 ### Screenshots
 
 <img width="1512" alt="SCR-20250329-rmuf" src="https://github.com/user-attachments/assets/6aa087b4-6d07-4b64-aded-81c7b3a3845f" />
