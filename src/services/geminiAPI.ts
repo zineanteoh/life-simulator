@@ -44,8 +44,68 @@ const getPhaseMessage = (age: number): string => {
   }
 };
 
-// Extensive list of historical events from 1950 to 2110
+// Extensive list of historical events from 1900 to 2110
 const worldEvents = [
+  // 1900s
+  { year: 1900, event: "Quantum Theory Introduced", significance: "Max Planck's discovery of quantum mechanics revolutionized our understanding of physics and laid groundwork for modern technology." },
+  { year: 1901, event: "First Nobel Prizes Awarded", significance: "The establishment of the Nobel Prizes began recognizing groundbreaking achievements in science and peace." },
+  { year: 1902, event: "First Trans-Pacific Cable", significance: "Communication between North America and Asia was revolutionized with the completion of the Pacific telegraph cable." },
+  { year: 1903, event: "Wright Brothers' First Flight", significance: "The first powered, controlled aircraft flight at Kitty Hawk marked the beginning of the aviation age." },
+  { year: 1904, event: "New York Subway Opens", significance: "The opening of the New York City Subway system transformed urban transportation." },
+  { year: 1905, event: "Einstein's Special Relativity", significance: "Einstein's theory fundamentally changed our understanding of space, time, and the universe." },
+  { year: 1906, event: "San Francisco Earthquake", significance: "One of the worst natural disasters in U.S. history destroyed much of San Francisco." },
+  { year: 1907, event: "First Plastic Invented", significance: "The invention of Bakelite marked the beginning of the modern plastics industry." },
+  { year: 1908, event: "Model T Ford Introduced", significance: "Henry Ford's affordable automobile revolutionized transportation and manufacturing." },
+  { year: 1909, event: "First North Pole Expedition", significance: "Robert Peary's expedition reached the North Pole, marking a milestone in exploration." },
+
+  // 1910s
+  { year: 1910, event: "First Commercial Radio Broadcast", significance: "The birth of radio broadcasting began transforming mass communication and entertainment." },
+  { year: 1911, event: "First Air Mail Service", significance: "The world's first air mail service began in India, revolutionizing postal delivery." },
+  { year: 1912, event: "Titanic Sinks", significance: "The tragic sinking of the 'unsinkable' ship led to major maritime safety reforms." },
+  { year: 1913, event: "Assembly Line Introduced", significance: "Henry Ford's assembly line revolutionized manufacturing and industry." },
+  { year: 1914, event: "World War I Begins", significance: "The Great War began, forever changing global politics and society." },
+  { year: 1915, event: "Einstein's General Relativity", significance: "Einstein's theory of gravity transformed our understanding of the cosmos." },
+  { year: 1916, event: "First Birth Control Clinic", significance: "Margaret Sanger opened the first birth control clinic in the United States." },
+  { year: 1917, event: "Russian Revolution", significance: "The Bolshevik Revolution created the world's first communist state." },
+  { year: 1918, event: "Spanish Flu Pandemic", significance: "The deadliest pandemic in modern history infected one-third of the world's population." },
+  { year: 1919, event: "Treaty of Versailles", significance: "The peace treaty ending World War I reshaped international boundaries and relations." },
+
+  // 1920s
+  { year: 1920, event: "Women's Suffrage in US", significance: "The 19th Amendment gave American women the right to vote." },
+  { year: 1921, event: "First Radio News Program", significance: "Regular radio news broadcasts began, changing how people received information." },
+  { year: 1922, event: "Discovery of King Tut's Tomb", significance: "The most complete ancient Egyptian royal tomb found sparked worldwide interest in archaeology." },
+  { year: 1923, event: "First Television Demonstration", significance: "Vladimir Zworykin demonstrated the first electronic television system." },
+  { year: 1924, event: "First Winter Olympics", significance: "The first Winter Olympic Games were held in Chamonix, France." },
+  { year: 1925, event: "Scopes Monkey Trial", significance: "The famous trial highlighted the debate between evolution and creationism." },
+  { year: 1926, event: "First Liquid-Fuel Rocket", significance: "Robert Goddard launched the first liquid-fueled rocket, pioneering space exploration." },
+  { year: 1927, event: "First Trans-Atlantic Solo Flight", significance: "Charles Lindbergh's historic flight captured the world's imagination." },
+  { year: 1928, event: "Discovery of Penicillin", significance: "Alexander Fleming's discovery revolutionized medicine with the first antibiotic." },
+  { year: 1929, event: "Stock Market Crash", significance: "The Wall Street Crash marked the beginning of the Great Depression." },
+
+  // 1930s
+  { year: 1930, event: "Discovery of Pluto", significance: "Clyde Tombaugh discovered Pluto, then considered the ninth planet." },
+  { year: 1931, event: "Empire State Building Completed", significance: "The world's tallest building symbolized American ambition during the Depression." },
+  { year: 1932, event: "Discovery of Neutron", significance: "James Chadwick's discovery advanced our understanding of atomic structure." },
+  { year: 1933, event: "Hitler Becomes Chancellor", significance: "Adolf Hitler's rise to power in Germany set the stage for World War II." },
+  { year: 1934, event: "Dust Bowl Begins", significance: "Severe drought and dust storms devastated American agriculture." },
+  { year: 1935, event: "Social Security Act", significance: "The cornerstone of America's social welfare system was established." },
+  { year: 1936, event: "First TV Broadcasting Service", significance: "BBC launched the world's first public television service." },
+  { year: 1937, event: "Hindenburg Disaster", significance: "The airship explosion effectively ended the era of passenger airships." },
+  { year: 1938, event: "Nuclear Fission Discovered", significance: "The discovery of nuclear fission led to both nuclear power and weapons." },
+  { year: 1939, event: "World War II Begins", significance: "The start of the most devastating conflict in human history." },
+
+  // 1940s
+  { year: 1940, event: "Battle of Britain", significance: "The RAF's victory prevented German invasion and marked a turning point in WWII." },
+  { year: 1941, event: "Pearl Harbor Attack", significance: "Japan's attack brought the United States into World War II." },
+  { year: 1942, event: "Manhattan Project Begins", significance: "The secret atomic bomb project changed warfare forever." },
+  { year: 1943, event: "Penicillin Mass Production", significance: "The first antibiotic became widely available, saving countless lives." },
+  { year: 1944, event: "D-Day Invasion", significance: "The largest seaborne invasion in history began the liberation of Western Europe." },
+  { year: 1945, event: "Atomic Bombs & WWII Ends", significance: "The war ended after atomic bombs were dropped on Japan, ushering in the nuclear age." },
+  { year: 1946, event: "First Computer ENIAC", significance: "The first general-purpose electronic computer began the digital revolution." },
+  { year: 1947, event: "Cold War Begins", significance: "The political and military tension between East and West shaped global politics." },
+  { year: 1948, event: "State of Israel Established", significance: "The creation of Israel dramatically changed Middle East politics." },
+  { year: 1949, event: "NATO Formed", significance: "The North Atlantic Treaty Organization formed to counter Soviet influence." },
+
   // Recent events (2020s)
   { 
     year: 2023, 

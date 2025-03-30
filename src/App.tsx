@@ -12,7 +12,7 @@ const BirthYearInput = ({ onBirthYearSubmit }: BirthYearInputProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const parsedYear = parseInt(birthYear);
-    if (!isNaN(parsedYear) && parsedYear >= 1950 && parsedYear <= 2020) {
+    if (!isNaN(parsedYear) && parsedYear >= 1900 && parsedYear <= 2020) {
       onBirthYearSubmit(parsedYear);
     }
   };
@@ -24,11 +24,11 @@ const BirthYearInput = ({ onBirthYearSubmit }: BirthYearInputProps) => {
       <form onSubmit={handleSubmit}>
         <input
           type="number"
-          min="1950"
+          min="1900"
           max="2020"
           value={birthYear}
           onChange={(e) => setBirthYear(e.target.value)}
-          placeholder="Enter your birth year (1950-2020)"
+          placeholder="Enter your birth year (1900-2020)"
           required
         />
         <button type="submit">Begin Journey</button>

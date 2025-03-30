@@ -4,56 +4,55 @@ import "./EventOverlay.css"; // We'll create this file
 
 interface EventOverlayProps {
   event: HistoricalEvent | null;
-  phaseMessage: string;
   isTimePaused?: boolean;
+  currentAge?: number;
+  onRestart?: () => void;
 }
 
 export const EventOverlay = ({
   event,
-  phaseMessage,
   isTimePaused = false,
+  currentAge = 0,
+  onRestart,
 }: EventOverlayProps) => {
   const [pastEvents, setPastEvents] = useState<HistoricalEvent[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<HistoricalEvent | null>(
     null
   );
-  const [personalImpact, setPersonalImpact] = useState<string>("");
+  const [showEndGame, setShowEndGame] = useState(false);
 
-  // Generate a personal impact message based on the event and current phase
-  const generatePersonalImpact = (event: HistoricalEvent) => {
-    const age = event.age;
-    let impact = "";
-
-    if (age < 10) {
-      impact = `At just ${age} years old, you experience this moment through a child's eyes. While adults around you discuss ${event.event.toLowerCase()}, you're absorbing these changes in ways that will shape your entire worldview. ${
-        event.significance
-      } These early memories will stay with you forever, influencing how you see similar events throughout your life.`;
-    } else if (age < 20) {
-      impact = `As a ${age}-year-old teenager, you're old enough to understand the significance of ${event.event.toLowerCase()}, but young enough to be profoundly shaped by it. ${
-        event.significance
-      } This event coincides with your formative years, becoming part of your generational identity and influencing your future perspectives.`;
-    } else if (age < 30) {
-      impact = `At ${age}, you're a young adult witnessing ${event.event.toLowerCase()} as you build your own path in life. ${
-        event.significance
-      } You discuss this event with peers, forming strong opinions and perhaps even getting involved in related movements or changes.`;
-    } else if (age < 50) {
-      impact = `Being ${age} years old, you're in your prime years when ${event.event.toLowerCase()} occurs. With life experience and established views, you understand the deep implications. ${
-        event.significance
-      } You might find yourself explaining this event to younger generations, sharing your firsthand perspective.`;
-    } else if (age < 70) {
-      impact = `At age ${age}, you've seen enough of history to put ${event.event.toLowerCase()} into broader context. ${
-        event.significance
-      } Your mature perspective allows you to see patterns and connections that younger generations might miss, giving you unique insights into this moment.`;
-    } else {
-      impact = `With ${age} years of wisdom, you witness ${event.event.toLowerCase()} with the perspective of someone who has seen the world change many times over. ${
-        event.significance
-      } Your long life experience gives you a rare ability to connect this event to historical patterns spanning multiple generations.`;
+  // Check for end game condition
+  useEffect(() => {
+    if (currentAge >= 90) {
+      setShowEndGame(true);
     }
+  }, [currentAge]);
 
-    return impact;
+  // Generate personal impact text based on age
+  const getPersonalContext = (event: HistoricalEvent) => {
+    const age = event.age;
+    if (age < 5) {
+      return "Too young to understand, but this moment shapes the world you'll grow up in.";
+    } else if (age < 10) {
+      return "Through your innocent eyes, you witness history unfold.";
+    } else if (age < 15) {
+      return "As you begin to understand the world, this moment leaves a lasting impression.";
+    } else if (age < 20) {
+      return "In your formative years, this event helps shape your worldview.";
+    } else if (age < 30) {
+      return "Young and full of dreams, you see how this changes everything.";
+    } else if (age < 40) {
+      return "With growing wisdom, you deeply understand the significance.";
+    } else if (age < 50) {
+      return "Your life experience gives you unique perspective on this moment.";
+    } else if (age < 60) {
+      return "You've seen enough to recognize how this will change the future.";
+    } else {
+      return "Your wisdom allows you to see the deeper meaning in this moment.";
+    }
   };
 
-  // Handle adding new events to the sidebar
+  // Handle adding new events
   useEffect(() => {
     if (event) {
       // Add to pastEvents if not already included
@@ -66,86 +65,81 @@ export const EventOverlay = ({
         return prev;
       });
 
-      // Generate personal impact message for the new event
-      setPersonalImpact(generatePersonalImpact(event));
-
-      // Auto-select new events as they come in
       setSelectedEvent(event);
-
-      // If not paused, clear selection after a delay
       if (!isTimePaused) {
         const timer = setTimeout(() => {
           setSelectedEvent(null);
-        }, 8000); // Reduced to 8 seconds since it's less intrusive on the side
+        }, 8000);
         return () => clearTimeout(timer);
       }
     }
   }, [event, isTimePaused]);
 
-  // Handle clicking on a sidebar event
-  const handleEventClick = (evt: HistoricalEvent) => {
-    if (selectedEvent?.year === evt.year) {
-      setSelectedEvent(null); // Toggle off if clicking the same event
-    } else {
-      setSelectedEvent(evt);
-      setPersonalImpact(generatePersonalImpact(evt));
+  const handleRestart = () => {
+    setShowEndGame(false);
+    setPastEvents([]);
+    setSelectedEvent(null);
+    if (onRestart) {
+      onRestart();
     }
   };
 
   return (
     <>
-      {/* Left-side event display */}
-      {selectedEvent && (
-        <div
-          className={`event-overlay center-overlay ${
-            isTimePaused ? "paused" : ""
-          }`}
-        >
-          <div className="event-year">
-            {selectedEvent.year}{" "}
-            <span>You are {selectedEvent.age} years old</span>
+      {/* Event text display for all devices */}
+      {selectedEvent && !showEndGame && (
+        <div className="mobile-event-text">
+          <div className="event-year">Age {selectedEvent.age}</div>
+          <div className="event-title">{selectedEvent.event}</div>
+          <div className="event-significance">
+            {getPersonalContext(selectedEvent)}
+            <br />
+            <br />
+            {selectedEvent.significance}
           </div>
-          <h2 className="event-title">{selectedEvent.event}</h2>
-          <div className="event-significance">{selectedEvent.significance}</div>
-          <div className="event-personal-impact">{personalImpact}</div>
-          <div className="event-phase-message">{phaseMessage}</div>
-          {!isTimePaused && (
-            <button
-              className="close-button"
-              onClick={() => setSelectedEvent(null)}
-            >
-              ×
-            </button>
-          )}
         </div>
       )}
 
       {/* Events sidebar */}
-      <div className="events-sidebar">
-        {pastEvents.map((evt) => (
-          <div
-            key={`${evt.year}-${evt.event}`}
-            className={`sidebar-event ${
-              selectedEvent?.year === evt.year ? "selected" : ""
-            }`}
-            onClick={() => handleEventClick(evt)}
-          >
-            <div className="sidebar-year">
-              {evt.year} <span>You were {evt.age} years old</span>
+      {!showEndGame && (
+        <div className="events-sidebar">
+          {pastEvents.map((evt) => (
+            <div
+              key={`${evt.year}-${evt.event}`}
+              className={`sidebar-event ${
+                selectedEvent?.year === evt.year ? "selected" : ""
+              }`}
+              onClick={() => setSelectedEvent(evt)}
+            >
+              <div className="sidebar-year">
+                {evt.year} <span>You were {evt.age} years old</span>
+              </div>
+              <div className="sidebar-title">{evt.event}</div>
             </div>
-            <div className="sidebar-title">{evt.event}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Pause overlay */}
-      {isTimePaused && (
+      {isTimePaused && !showEndGame && (
         <div className="pause-overlay">
-          <div className="pause-message">
-            YOUR LIFE IS PAUSED
-            <div className="pause-instruction">
-              (press spacebar to continue your journey)
-            </div>
+          <div className="pause-message">Time Stands Still</div>
+        </div>
+      )}
+
+      {/* End game overlay */}
+      {showEndGame && (
+        <div className="end-game-overlay">
+          <div className="end-game-content">
+            <h1 className="end-game-title">Your Journey Has Ended</h1>
+            <p className="end-game-message">
+              You've witnessed {pastEvents.length} historical events across your
+              lifetime. Would you like to experience another life and see how
+              different events might shape your perspective?
+            </p>
+            <button className="restart-button" onClick={handleRestart}>
+              Begin a New Life
+            </button>
           </div>
         </div>
       )}

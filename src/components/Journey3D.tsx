@@ -19,10 +19,13 @@ interface SceneProps {
   onEventChange: (event: HistoricalEvent | null) => void;
   isTimePaused: boolean;
   setIsTimePaused: (paused: boolean) => void;
+  speed: number;
 }
 
 // Start screen overlay component
 const StartOverlay = () => {
+  const isMobile = window.innerWidth <= 768;
+
   return (
     <div
       style={{
@@ -41,17 +44,29 @@ const StartOverlay = () => {
         zIndex: 100,
         padding: "20px",
         textAlign: "center",
+        boxSizing: "border-box",
+        overflowY: "auto",
+        WebkitOverflowScrolling: "touch",
       }}
     >
-      <h1 style={{ fontSize: "4rem", marginBottom: "1rem", color: "#E3F2FD" }}>
+      <h1
+        style={{
+          fontSize: "clamp(2rem, 8vw, 4rem)",
+          marginBottom: "clamp(0.5rem, 2vw, 1rem)",
+          color: "#E3F2FD",
+          padding: "0 1rem",
+          lineHeight: 1.2,
+        }}
+      >
         Your Life Journey
       </h1>
       <p
         style={{
-          fontSize: "1.5rem",
-          marginBottom: "2rem",
+          fontSize: "clamp(1rem, 4vw, 1.5rem)",
+          marginBottom: "clamp(1rem, 4vw, 2rem)",
           maxWidth: "800px",
-          lineHeight: "1.6",
+          lineHeight: 1.6,
+          padding: "0 1rem",
         }}
       >
         Experience history through your own timeline. Watch as world-changing
@@ -60,15 +75,23 @@ const StartOverlay = () => {
       </p>
       <div
         style={{
-          fontSize: "1.2rem",
+          fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
           backgroundColor: "rgba(255, 255, 255, 0.1)",
-          padding: "20px",
+          padding: "clamp(15px, 4vw, 20px)",
           borderRadius: "10px",
+          width: "90%",
           maxWidth: "600px",
-          marginBottom: "2rem",
+          marginBottom: "clamp(1rem, 4vw, 2rem)",
+          backdropFilter: "blur(5px)",
         }}
       >
-        <h3 style={{ marginBottom: "1rem", color: "#90CAF9" }}>
+        <h3
+          style={{
+            marginBottom: "1rem",
+            color: "#90CAF9",
+            fontSize: "clamp(1rem, 4vw, 1.2rem)",
+          }}
+        >
           How to Experience:
         </h3>
         <ul
@@ -79,27 +102,72 @@ const StartOverlay = () => {
             margin: 0,
           }}
         >
-          <li style={{ marginBottom: "0.5rem" }}>
-            🎮 Press SPACEBAR to start/pause your journey
+          <li
+            style={{
+              marginBottom: "0.8rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <span style={{ fontSize: "1.2em" }}>🎮</span>
+            <span>
+              {isMobile
+                ? "Use controls to play/pause"
+                : "Press SPACEBAR to start/pause"}
+            </span>
           </li>
-          <li style={{ marginBottom: "0.5rem" }}>
-            🎵 Control music with the volume slider
+          <li
+            style={{
+              marginBottom: "0.8rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <span style={{ fontSize: "1.2em" }}>🎵</span>
+            <span>Control music with the volume slider</span>
           </li>
-          <li style={{ marginBottom: "0.5rem" }}>
-            📜 Watch events appear in the timeline
+          <li
+            style={{
+              marginBottom: "0.8rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <span style={{ fontSize: "1.2em" }}>📜</span>
+            <span>Watch events appear as you travel</span>
           </li>
-          <li>⏸️ Pause anytime to reflect on historical moments</li>
+          <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <span style={{ fontSize: "1.2em" }}>⏸️</span>
+            <span>Pause anytime to reflect on moments</span>
+          </li>
         </ul>
       </div>
-      <div
-        style={{
-          animation: "pulse 2s infinite",
-          fontSize: "1.2rem",
-          opacity: 0.8,
-        }}
-      >
-        Press SPACEBAR to Begin Your Journey
-      </div>
+      {isMobile ? (
+        <button
+          className="mobile-start-button"
+          onClick={() => {
+            const event = new KeyboardEvent("keydown", { code: "Space" });
+            window.dispatchEvent(event);
+          }}
+        >
+          Begin Your Journey
+        </button>
+      ) : (
+        <div
+          style={{
+            animation: "pulse 2s infinite",
+            fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
+            opacity: 0.8,
+            padding: "0 1rem",
+            textAlign: "center",
+          }}
+        >
+          Press SPACEBAR to Begin Your Journey
+        </div>
+      )}
     </div>
   );
 };
@@ -283,13 +351,15 @@ const Scene = ({
   onEventChange,
   isTimePaused,
   setIsTimePaused,
+  speed,
 }: SceneProps) => {
   const characterRef = useRef<THREE.Group>(null);
   const [events, setEvents] = useState<HistoricalEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
-  const movementSpeed = 1 / 3; // Changed from 2 to 1/3 (3 seconds per year)
+  const baseMovementSpeed = 1 / 3; // Base speed (3 seconds per year)
+  const movementSpeed = baseMovementSpeed * speed; // Adjusted by speed multiplier
   const cameraHeight = 2;
   const cameraDistance = 4;
 
@@ -421,24 +491,12 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
   const [currentAge, setCurrentAge] = useState(0);
   const [isTimePaused, setIsTimePaused] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [speed, setSpeed] = useState(1); // Add speed state
   const initialZ = 0 - 45;
   const [currentEvent, setCurrentEvent] = useState<HistoricalEvent | null>(
     null
   );
-  const [phaseMessage, setPhaseMessage] = useState("");
-
-  // Update phase message based on current age
-  useEffect(() => {
-    if (currentAge <= 30) {
-      setPhaseMessage("Everything that happened is normal to you");
-    } else if (currentAge <= 60) {
-      setPhaseMessage("You're at the peak of your career during these events");
-    } else {
-      setPhaseMessage(
-        "Everything that happened goes against human nature for you"
-      );
-    }
-  }, [currentAge]);
+  const [isMobile] = useState(window.innerWidth <= 768);
 
   // Set hasStarted to true when the age increases above 0
   useEffect(() => {
@@ -446,6 +504,31 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
       setHasStarted(true);
     }
   }, [currentAge, hasStarted]);
+
+  // Handle play/pause
+  const togglePause = () => {
+    if (!hasStarted && currentAge === 0) {
+      setHasStarted(true);
+    } else {
+      setIsTimePaused(!isTimePaused);
+    }
+  };
+
+  // Handle speed change
+  const handleSpeedChange = () => {
+    setSpeed((prevSpeed) => {
+      if (prevSpeed === 1) return 2;
+      if (prevSpeed === 2) return 5;
+      if (prevSpeed === 5) return 10;
+      if (prevSpeed === 10) return 50;
+      return 1;
+    });
+  };
+
+  const handleEndGame = () => {
+    // Instead of restarting, we'll redirect back to the birth year input page
+    window.location.href = "/";
+  };
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
@@ -465,21 +548,37 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
           onEventChange={setCurrentEvent}
           isTimePaused={isTimePaused}
           setIsTimePaused={setIsTimePaused}
+          speed={speed}
         />
       </Canvas>
       <HUD
         age={Math.floor(currentAge)}
         birthYear={birthYear}
         isTimePaused={isTimePaused}
+        speed={speed}
+        onSpeedChange={handleSpeedChange}
       />
       <EventOverlay
         event={currentEvent}
-        phaseMessage={phaseMessage}
         isTimePaused={isTimePaused}
+        currentAge={Math.floor(currentAge)}
+        onRestart={handleEndGame}
       />
       <AudioPlayer />
       {/* Only show start overlay at the very beginning */}
       {!hasStarted && currentAge === 0 && <StartOverlay />}
+      {/* Mobile controls */}
+      {isMobile && hasStarted && (
+        <div className="mobile-controls">
+          <button
+            className="mobile-control-button"
+            onClick={togglePause}
+            aria-label={isTimePaused ? "Play" : "Pause"}
+          >
+            {isTimePaused ? "▶️" : "⏸️"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
