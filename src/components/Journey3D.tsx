@@ -447,10 +447,6 @@ export const Journey3D = ({ birthYear }: Journey3DProps) => {
     }
   }, [currentAge, hasStarted]);
 
-  const handleStart = () => {
-    setHasStarted(true);
-  };
-
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <Canvas
