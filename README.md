@@ -1,10 +1,7 @@
 ## Life Simulator
 
-This entire repository is coded by AI. I wrote 0 lines of code. 
-
-Time: 1.5 hours. 
-
-Every week, [@kohrachel](https://github.com/kohrachel/) and I give ourselves an hour to create a goofy project solely with AI. No human coding, any idea you can think of.
+🌀 Part of the [Vibe Coding Series](https://github.com/zineanteoh/vibe-coding)  
+A weekly challenge to build something weird using only AI in 1 hour.
 
 This project is inspired by the following [quote from Douglas Adams](https://www.goodreads.com/quotes/39828-i-ve-come-up-with-a-set-of-rules-that-describe):
 
